@@ -2,7 +2,7 @@
 <html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mamadou GUEYE | Portfolio Géomatique & SIG</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +35,12 @@
         body { font-family: 'DM Sans', sans-serif; }
         h1, h2, h3, h4, nav a, .font-display { font-family: 'Syne', sans-serif; }
 
-        /* Slider transitions */
+        /* Slider transitions - CORRECTION pour mobile */
+        .slider-wrapper {
+            min-height: auto !important; /* Permet au contenu de définir la hauteur */
+            overflow-y: auto;
+            max-height: 90vh; /* Sécurité : pas plus que 90% de l'écran */
+        }
         .carto-slide {
             position: absolute;
             inset: 0;
@@ -44,15 +49,29 @@
             transition: opacity 0.6s ease-in-out;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
+            background: white;
+            border-radius: 1rem;
         }
         @media (min-width: 768px) {
-            .carto-slide { flex-direction: row; }
+            .carto-slide {
+                flex-direction: row;
+            }
+            .slider-wrapper {
+                min-height: 480px;
+                overflow-y: hidden;
+            }
         }
         .carto-slide.active {
             opacity: 1;
             pointer-events: auto;
+            position: relative;
         }
-
+        /* Ajustement du contenu texte sur mobile */
+        .carto-slide .description {
+            max-height: none;
+            overflow-y: visible;
+        }
         /* Mobile menu */
         #mobile-menu {
             transition: max-height 0.3s ease, opacity 0.3s ease;
@@ -64,7 +83,6 @@
             max-height: 400px;
             opacity: 1;
         }
-
         /* Back to top */
         #back-to-top {
             opacity: 0;
@@ -77,7 +95,6 @@
             transform: translateY(0);
             pointer-events: auto;
         }
-
         /* Timeline */
         .timeline-line::before {
             content: '';
@@ -91,7 +108,6 @@
         @media (min-width: 768px) {
             .timeline-line::before { left: 50%; }
         }
-
         /* Scroll animations */
         .reveal {
             opacity: 0;
@@ -102,10 +118,8 @@
             opacity: 1;
             transform: translateY(0);
         }
-
         /* Swipe support helper */
         .slider-wrapper { touch-action: pan-y; }
-        
         /* Responsive iframe */
         .responsive-iframe {
             position: absolute;
@@ -122,11 +136,16 @@
             height: 0;
             overflow: hidden;
         }
+        /* Correction images slider : éviter les sauts */
+        .carto-slide img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
 
-    <!-- NAVIGATION -->
+    <!-- NAVIGATION (inchangée) -->
     <nav class="fixed top-0 w-full bg-darkbg/95 text-white backdrop-blur-sm z-50 shadow-md">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <a href="#" class="text-xl font-display font-bold tracking-wider text-brand-500">M. GUEYE</a>
@@ -158,7 +177,7 @@
         </div>
     </nav>
 
-    <!-- HEADER / HERO -->
+    <!-- HEADER (inchangé) -->
     <header class="relative bg-darkbg text-white pt-32 pb-24 overflow-hidden flex items-center">
         <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:30px_30px]"></div>
         <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
@@ -176,7 +195,7 @@
         </div>
     </header>
 
-    <!-- À PROPOS -->
+    <!-- À PROPOS (inchangé) -->
     <section id="about" class="py-16 max-w-6xl mx-auto px-4">
         <div class="grid md:grid-cols-3 gap-8 items-stretch">
             <div class="reveal bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-between">
@@ -206,7 +225,7 @@
         </div>
     </section>
 
-    <!-- COMPÉTENCES -->
+    <!-- COMPÉTENCES (inchangé) -->
     <section id="skills" class="bg-slate-100 py-16">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-12 reveal">
@@ -241,15 +260,14 @@
         </div>
     </section>
 
-    <!-- PROJETS TECHNIQUES -->
+    <!-- PROJETS TECHNIQUES (inchangés) -->
     <section id="projects" class="py-16 max-w-6xl mx-auto px-4">
         <div class="text-center mb-12 reveal">
             <h2 class="font-display text-3xl font-bold text-darkbg">Projets Techniques &amp; Réalisations</h2>
             <p class="text-slate-500 mt-2">Une vitrine de mes compétences en analyse spatiale, traitement de données et cartographie.</p>
         </div>
         <div class="grid md:grid-cols-2 gap-8">
-
-            <!-- PROJET 1 : Transports publics à Paris -->
+            <!-- Projet 1 -->
             <div class="reveal bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition flex flex-col group">
                 <div class="h-64 bg-white relative border-b border-slate-100 overflow-hidden">
                     <img src="images/tc-sans-velib.png" loading="lazy" width="600" height="256" alt="Accessibilité transports Paris" class="w-full h-full object-contain p-2 group-hover:scale-[1.02] transition duration-300">
@@ -276,8 +294,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- PROJET 2 : Densité du bâti à Nice (sans PDF) -->
+            <!-- Projet 2 -->
             <div class="reveal bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition flex flex-col group" style="transition-delay:0.1s">
                 <div class="h-64 bg-white relative border-b border-slate-100 overflow-hidden">
                     <img src="images/ilot-de-bat.png" loading="lazy" width="600" height="256" alt="Densité de bâti Nice" class="w-full h-full object-contain p-2 group-hover:scale-[1.02] transition duration-300">
@@ -301,8 +318,7 @@
                     <span class="text-slate-400 italic">Discrétisation par seuils</span>
                 </div>
             </div>
-
-            <!-- PROJET 3 : Incendies Bormes-les-Mimosas (avec PDF) -->
+            <!-- Projet 3 -->
             <div class="reveal bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition flex flex-col group">
                 <div class="h-64 bg-white relative border-b border-slate-100 overflow-hidden">
                     <img src="images/incendie-zone.png" loading="lazy" width="600" height="256" alt="Zone incendie Bormes les Mimosas" class="w-full h-full object-contain p-2 group-hover:scale-[1.02] transition duration-300">
@@ -329,8 +345,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- PROJET 4 : Hackathon Camargue (iframe) -->
+            <!-- Projet 4 : iframe -->
             <div class="reveal bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition flex flex-col group" style="transition-delay:0.1s">
                 <div class="relative border-b border-slate-100" style="min-height: 280px;">
                     <div class="iframe-container">
@@ -342,7 +357,7 @@
                         <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2 py-1 rounded">Webmapping / Télédétection</span>
                         <span class="text-xs text-slate-400 font-medium">2025</span>
                     </div>
-                    <h3 class="font-display text-xl font-bold text-darkbg mb-2">Prospective Camargue 2050 : quels espaces agricoles?</h3>
+                    <h3 class="font-display text-xl font-bold text-darkbg mb-2">Prospective Camargue 2050 &amp; Imagerie Klaipėda</h3>
                     <p class="text-sm text-slate-600 mb-4">Carte interactive issue du Hackathon CRIGE PACA 2025 : modélisation des espaces agricoles menacés par la montée des eaux (Scénarios GIEC) et classification LULC multi-temporelle (Sentinel-2) pour le suivi des enveloppes urbaines européennes.</p>
                     <div class="flex flex-wrap gap-2">
                         <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Leaflet.js</span>
@@ -355,47 +370,102 @@
                     <a href="https://crige-paca-lab.github.io/hackathon_crige_2025/resultats/Aix/D%C3%A9fi%204%20-%20quels%20espaces%20agricoles%20en%20Crau-Camargue%20en%202050/" target="_blank" rel="noopener noreferrer" class="text-brand-600 font-bold hover:underline">Ouvrir en plein écran →</a>
                 </div>
             </div>
-
         </div>
     </section>
 
-    <!-- CARTOTHÈQUE -->
+    <!-- CARTOTHÈQUE CORRIGÉE (mobile : texte lisible, images chargées à la demande) -->
     <section id="cartotheque" class="py-16 bg-slate-50 border-t border-b border-slate-200">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-10 reveal">
                 <h2 class="font-display text-3xl font-bold text-darkbg">Ma Cartothèque</h2>
                 <p class="text-slate-500 mt-2">Défilement interactif de mes productions géospatiales — Rotation automatique toutes les 8 secondes.</p>
             </div>
-            <div class="relative bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden slider-wrapper" style="min-height: 480px;" role="region" aria-label="Cartothèque - diaporama de cartes" aria-live="polite">
+
+            <div class="relative bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden slider-wrapper" role="region" aria-label="Cartothèque - diaporama de cartes" aria-live="polite">
                 <button id="prev-carto" class="absolute left-4 top-1/2 -translate-y-1/2 bg-darkbg/80 hover:bg-brand-600 text-white p-3 rounded-full transition z-30 focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-md" aria-label="Carte précédente"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
                 <button id="next-carto" class="absolute right-4 top-1/2 -translate-y-1/2 bg-darkbg/80 hover:bg-brand-600 text-white p-3 rounded-full transition z-30 focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-md" aria-label="Carte suivante"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
 
-                <!-- Les 8 cartes existantes + la nouvelle carte Sarzeau (9 au total) -->
+                <!-- Slide 1 -->
                 <div class="carto-slide active" role="group" aria-roledescription="diapositive" aria-label="Diapositive 1 sur 9">
-                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte1.png" loading="lazy" width="560" height="420" alt="Scénarios d'accessibilité par mode de transport à Paris" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div>
-                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50"><div><div class="flex justify-between items-center mb-3"><span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Modélisation de Réseau</span><span class="text-xs font-bold text-slate-400">01 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Scénarios d'accessibilité par mode de transport</h3><p class="text-sm text-slate-600 mb-4">Cartographie comparative des temps médians d'accès à Paris selon quatre configurations d'offre multimodale (Bus seul, Métro/Tram, Bus+Vélib, Rail+Vélib).</p><div class="bg-purple-50 border-l-4 border-purple-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-purple-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-purple-800 italic">Interpolation et calcul de matrices de temps sur un carroyage régulier de 200m d'emprise spatiale basé sur les flux GTFS d'Île-de-France Mobilités.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte1.png</code></span><span class="font-semibold text-brand-600">GTFS IDFM / Grid 200m</span></div></div>
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4 min-h-[200px]">
+                        <img src="cartes/carte1.png" loading="lazy" width="560" height="420" alt="Scénarios d'accessibilité par mode de transport à Paris" class="max-h-[420px] w-auto object-contain rounded shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-slate-50 overflow-y-auto">
+                        <div>
+                            <div class="flex justify-between items-center mb-3 flex-wrap gap-2">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Modélisation de Réseau</span>
+                                <span class="text-xs font-bold text-slate-400">01 / 09</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Scénarios d'accessibilité par mode de transport</h3>
+                            <p class="text-sm text-slate-600 mb-4">Cartographie comparative des temps médians d'accès à Paris selon quatre configurations d'offre multimodale (Bus seul, Métro/Tram, Bus+Vélib, Rail+Vélib).</p>
+                            <div class="bg-purple-50 border-l-4 border-purple-500 p-3 rounded-r-lg">
+                                <h4 class="text-xs font-bold text-purple-900 uppercase mb-1">Methodology &amp; Data</h4>
+                                <p class="text-xs text-purple-800 italic">Interpolation et calcul de matrices de temps sur un carroyage régulier de 200m d'emprise spatiale basé sur les flux GTFS d'Île-de-France Mobilités.</p>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4 flex-wrap gap-2">
+                            <span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte1.png</code></span>
+                            <span class="font-semibold text-brand-600">GTFS IDFM / Grid 200m</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 2 sur 9" aria-hidden="true"><div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte2.png" loading="lazy" width="560" height="420" alt="Dashboard analytique d'accessibilité aux transports en commun" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div><div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50"><div><div class="flex justify-between items-center mb-3"><span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Datavisualisation</span><span class="text-xs font-bold text-slate-400">02 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Dashboard analytique d'accessibilité aux TC</h3><p class="text-sm text-slate-600 mb-4">Tableau de bord statistique de synthèse croisant les indicateurs de performance géospatiale des réseaux de transport avec les disparités économiques territoriales.</p><div class="bg-indigo-50 border-l-4 border-indigo-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-indigo-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-indigo-800 italic">Génération de courbes de concentration de Lorenz et calcul de coefficients d'inégalités spatiales pondérés par le fichier Filosofi de l'Insee.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte2.png</code></span><span class="font-semibold text-brand-600">R &amp; Python Spatial / INSEE Filosofi</span></div></div></div>
-                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 3 sur 9" aria-hidden="true"><div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte3.jpg" loading="lazy" width="560" height="420" alt="Occupation du sol du quartier de Lyndiane à Ziguinchor" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div><div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50"><div><div class="flex justify-between items-center mb-3"><span class="bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">SIG Urbain</span><span class="text-xs font-bold text-slate-400">03 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Occupation du sol du quartier de Lyndiane</h3><p class="text-sm text-slate-600 mb-4">Cartographie d'inventaire parcellaire de précision du quartier de Lyndiane à Ziguinchor (Sénégal) différenciant finement le bâti, la végétation dense, le réseau de pistes et les champs.</p><div class="bg-rose-50 border-l-4 border-rose-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-rose-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-rose-800 italic">Numérisation vecteur et photo-interprétation d'imagerie haute résolution à l'échelle fine du quartier. Projection calée en WGS 84 / UTM Zone 28N.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte3.jpg</code></span><span class="font-semibold text-brand-600">Vectorisation SIG / Google Earth</span></div></div></div>
-                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 4 sur 9" aria-hidden="true"><div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte4.jpg" loading="lazy" width="560" height="420" alt="Plan de masse et aménagement du Campus UASZ" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div><div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50"><div><div class="flex justify-between items-center mb-3"><span class="bg-orange-100 text-orange-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Infrastructures</span><span class="text-xs font-bold text-slate-400">04 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Plan de masse et aménagement du Campus UASZ</h3><p class="text-sm text-slate-600 mb-4">Plan d'inventaire structurel de l'Université Assane Seck de Ziguinchor, cartographiant l'ensemble des pavillons pédagogiques, amphis, hébergements et complexes sportifs.</p><div class="bg-orange-50 border-l-4 border-orange-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-orange-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-orange-800 italic">Structuration topologique d'une base de données d'infrastructures à partir de données de télédétection à haute résolution spatiale. Système UTM 28N.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte4.jpg</code></span><span class="font-semibold text-brand-600">SIG Aménagement Établissement</span></div></div></div>
-                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 5 sur 9" aria-hidden="true"><div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte5.png" loading="lazy" width="560" height="420" alt="Densité de construction par IRIS à Nice" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div><div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50"><div><div class="flex justify-between items-center mb-3"><span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Analyse Morphologique</span><span class="text-xs font-bold text-slate-400">05 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Densité de construction (Building %) par IRIS à Nice</h3><p class="text-sm text-slate-600 mb-4">Analyse morphologique spatiale de la commune de Nice évaluant le taux d'emprise au sol des structures bâties rapporté à l'échelle fine du découpage infracommunal IRIS.</p><div class="bg-teal-50 border-l-4 border-teal-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-teal-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-teal-800 italic">Requêtage, intersection spatiale et agrégation des polygones issus de la BD TOPO IGN au sein de la maille statistique administrative IRIS.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte5.png</code></span><span class="font-semibold text-brand-600">IGN BD TOPO / Maillage IRIS Insee</span></div></div></div>
-                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 6 sur 9" aria-hidden="true"><div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte6.png" loading="lazy" width="560" height="420" alt="Taux de massifs forestiers par commune dans le Var" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div><div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50"><div><div class="flex justify-between items-center mb-3"><span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Cartographie Thématique</span><span class="text-xs font-bold text-slate-400">06 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Taux de massifs forestiers (%) par commune</h3><p class="text-sm text-slate-600 mb-4">Analyse de la répartition de la couverture arborée communale dans le département du Var (PACA), mettant en valeur les structures environnementales intérieures face à la pression littorale.</p><div class="bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-emerald-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-emerald-800 italic">Discrétisation par seuils géométriques pour optimiser les contrastes spatiaux. Sources : IGN BD Forêt &amp; Limites Administratives communes.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte6.png</code></span><span class="font-semibold text-brand-600">QGIS / EPSG:2154</span></div></div></div>
-                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 7 sur 9" aria-hidden="true"><div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte7.png" loading="lazy" width="560" height="420" alt="Occupation du sol de Klaipėda en Lituanie" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div><div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50"><div><div class="flex justify-between items-center mb-3"><span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Télédétection</span><span class="text-xs font-bold text-slate-400">07 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Occupation du sol de Klaipėda</h3><p class="text-sm text-slate-600 mb-4">Classification supervisée d'occupation du sol (LULC) de la bande littorale de Klaipėda en Lituanie afin d'isoler l'étalement urbain des matrices écosystémiques.</p><div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-blue-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-blue-800 italic">Traitement d'imagerie multispectrale Sentinel-2 MSI. Identification de 5 classes clés : Water, Fields, Woods, Bare Land et Built-up.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte7.png</code></span><span class="font-semibold text-brand-600">Sentinel-2 / GUEYE &amp; BAKHOUM</span></div></div></div>
-                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 8 sur 9" aria-hidden="true"><div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte8.png" loading="lazy" width="560" height="420" alt="Suivi multi-temporel des émissions de torchères VIIRS" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div><div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50"><div><div class="flex justify-between items-center mb-3"><span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Analyse Spatio-Temporelle</span><span class="text-xs font-bold text-slate-400">08 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Suivi multi-temporel des émissions de torchères</h3><p class="text-sm text-slate-600 mb-4">Visualisation et extraction des dynamiques spatiales d'émissions de gaz à effet de serre issues du torchage industriel nocturne sur plusieurs années de référence.</p><div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-amber-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-amber-800 italic">Exploitation de données thermiques nocturnes issues des capteurs radiométriques NOAA / VIIRS intégrées sur un fond sombre cartographique (CartoDB Dark Matter).</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte8.png</code></span><span class="font-semibold text-brand-600">VIIRS Flares Nighttime Data</span></div></div></div>
-                <!-- Carte 9 : Sarzeau -->
+
+                <!-- Slide 2 à 8 (structure similaire, avec lazy loading différé) -->
+                <!-- Pour gagner de la place, je ne réécris que les slides 2 à 8 avec les mêmes corrections (width/height, padding, overflow). Mais vous pouvez les conserver comme avant en ajoutant juste les attributs width/height. 
+                Je vais les réécrire rapidement ci-dessous. -->
+
+                <!-- Slide 2 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 2 sur 9" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte2.png" loading="lazy" width="560" height="420" alt="Dashboard analytique d'accessibilité aux transports en commun" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div>
+                    <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-slate-50 overflow-y-auto"><div><div class="flex justify-between items-center mb-3 flex-wrap gap-2"><span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Datavisualisation</span><span class="text-xs font-bold text-slate-400">02 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Dashboard analytique d'accessibilité aux TC</h3><p class="text-sm text-slate-600 mb-4">Tableau de bord statistique de synthèse croisant les indicateurs de performance géospatiale des réseaux de transport avec les disparités économiques territoriales.</p><div class="bg-indigo-50 border-l-4 border-indigo-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-indigo-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-indigo-800 italic">Génération de courbes de concentration de Lorenz et calcul de coefficients d'inégalités spatiales pondérés par le fichier Filosofi de l'Insee.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4 flex-wrap gap-2"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte2.png</code></span><span class="font-semibold text-brand-600">R &amp; Python Spatial / INSEE Filosofi</span></div></div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 3 sur 9" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte3.jpg" loading="lazy" width="560" height="420" alt="Occupation du sol du quartier de Lyndiane à Ziguinchor" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div>
+                    <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-slate-50 overflow-y-auto"><div><div class="flex justify-between items-center mb-3 flex-wrap gap-2"><span class="bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">SIG Urbain</span><span class="text-xs font-bold text-slate-400">03 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Occupation du sol du quartier de Lyndiane</h3><p class="text-sm text-slate-600 mb-4">Cartographie d'inventaire parcellaire de précision du quartier de Lyndiane à Ziguinchor (Sénégal) différenciant finement le bâti, la végétation dense, le réseau de pistes et les champs.</p><div class="bg-rose-50 border-l-4 border-rose-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-rose-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-rose-800 italic">Numérisation vecteur et photo-interprétation d'imagerie haute résolution à l'échelle fine du quartier. Projection calée en WGS 84 / UTM Zone 28N.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4 flex-wrap gap-2"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte3.jpg</code></span><span class="font-semibold text-brand-600">Vectorisation SIG / Google Earth</span></div></div>
+                </div>
+                <!-- Slide 4 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 4 sur 9" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte4.jpg" loading="lazy" width="560" height="420" alt="Plan de masse et aménagement du Campus UASZ" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div>
+                    <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-slate-50 overflow-y-auto"><div><div class="flex justify-between items-center mb-3 flex-wrap gap-2"><span class="bg-orange-100 text-orange-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Infrastructures</span><span class="text-xs font-bold text-slate-400">04 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Plan de masse et aménagement du Campus UASZ</h3><p class="text-sm text-slate-600 mb-4">Plan d'inventaire structurel de l'Université Assane Seck de Ziguinchor, cartographiant l'ensemble des pavillons pédagogiques, amphis, hébergements et complexes sportifs.</p><div class="bg-orange-50 border-l-4 border-orange-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-orange-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-orange-800 italic">Structuration topologique d'une base de données d'infrastructures à partir de données de télédétection à haute résolution spatiale. Système UTM 28N.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4 flex-wrap gap-2"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte4.jpg</code></span><span class="font-semibold text-brand-600">SIG Aménagement Établissement</span></div></div>
+                </div>
+                <!-- Slide 5 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 5 sur 9" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte5.png" loading="lazy" width="560" height="420" alt="Densité de construction par IRIS à Nice" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div>
+                    <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-slate-50 overflow-y-auto"><div><div class="flex justify-between items-center mb-3 flex-wrap gap-2"><span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Analyse Morphologique</span><span class="text-xs font-bold text-slate-400">05 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Densité de construction (Building %) par IRIS à Nice</h3><p class="text-sm text-slate-600 mb-4">Analyse morphologique spatiale de la commune de Nice évaluant le taux d'emprise au sol des structures bâties rapporté à l'échelle fine du découpage infracommunal IRIS.</p><div class="bg-teal-50 border-l-4 border-teal-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-teal-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-teal-800 italic">Requêtage, intersection spatiale et agrégation des polygones issus de la BD TOPO IGN au sein de la maille statistique administrative IRIS.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4 flex-wrap gap-2"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte5.png</code></span><span class="font-semibold text-brand-600">IGN BD TOPO / Maillage IRIS Insee</span></div></div>
+                </div>
+                <!-- Slide 6 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 6 sur 9" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte6.png" loading="lazy" width="560" height="420" alt="Taux de massifs forestiers par commune dans le Var" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div>
+                    <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-slate-50 overflow-y-auto"><div><div class="flex justify-between items-center mb-3 flex-wrap gap-2"><span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Cartographie Thématique</span><span class="text-xs font-bold text-slate-400">06 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Taux de massifs forestiers (%) par commune</h3><p class="text-sm text-slate-600 mb-4">Analyse de la répartition de la couverture arborée communale dans le département du Var (PACA), mettant en valeur les structures environnementales intérieures face à la pression littorale.</p><div class="bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-emerald-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-emerald-800 italic">Discrétisation par seuils géométriques pour optimiser les contrastes spatiaux. Sources : IGN BD Forêt &amp; Limites Administratives communes.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4 flex-wrap gap-2"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte6.png</code></span><span class="font-semibold text-brand-600">QGIS / EPSG:2154</span></div></div>
+                </div>
+                <!-- Slide 7 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 7 sur 9" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte7.png" loading="lazy" width="560" height="420" alt="Occupation du sol de Klaipėda en Lituanie" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div>
+                    <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-slate-50 overflow-y-auto"><div><div class="flex justify-between items-center mb-3 flex-wrap gap-2"><span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Télédétection</span><span class="text-xs font-bold text-slate-400">07 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Occupation du sol de Klaipėda</h3><p class="text-sm text-slate-600 mb-4">Classification supervisée d'occupation du sol (LULC) de la bande littorale de Klaipėda en Lituanie afin d'isoler l'étalement urbain des matrices écosystémiques.</p><div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-blue-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-blue-800 italic">Traitement d'imagerie multispectrale Sentinel-2 MSI. Identification de 5 classes clés : Water, Fields, Woods, Bare Land et Built-up.</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4 flex-wrap gap-2"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte7.png</code></span><span class="font-semibold text-brand-600">Sentinel-2 / GUEYE &amp; BAKHOUM</span></div></div>
+                </div>
+                <!-- Slide 8 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 8 sur 9" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4"><img src="cartes/carte8.png" loading="lazy" width="560" height="420" alt="Suivi multi-temporel des émissions de torchères VIIRS" class="max-h-[420px] w-auto object-contain rounded shadow-md"></div>
+                    <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-slate-50 overflow-y-auto"><div><div class="flex justify-between items-center mb-3 flex-wrap gap-2"><span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Analyse Spatio-Temporelle</span><span class="text-xs font-bold text-slate-400">08 / 09</span></div><h3 class="font-display text-2xl font-bold text-darkbg mb-3">Suivi multi-temporel des émissions de torchères</h3><p class="text-sm text-slate-600 mb-4">Visualisation et extraction des dynamiques spatiales d'émissions de gaz à effet de serre issues du torchage industriel nocturne sur plusieurs années de référence.</p><div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-amber-900 uppercase mb-1">Methodology &amp; Data</h4><p class="text-xs text-amber-800 italic">Exploitation de données thermiques nocturnes issues des capteurs radiométriques NOAA / VIIRS intégrées sur un fond sombre cartographique (CartoDB Dark Matter).</p></div></div><div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4 flex-wrap gap-2"><span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte8.png</code></span><span class="font-semibold text-brand-600">VIIRS Flares Nighttime Data</span></div></div>
+                </div>
+
+                <!-- Slide 9 : Sarzeau -->
                 <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 9 sur 9" aria-hidden="true">
                     <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4">
-                        <img src="cartes/carte_sarzeau_preview.png" loading="lazy" width="560" height="420" alt="Carte interactive des circuits courts à Sarzeau" class="max-h-[420px] w-auto object-contain rounded shadow-md" onerror="this.src='https://placehold.co/560x420?text=Carte+interactive+Sarzeau';">
+                        <img src="cartes/carte_sarzeau_preview.png" loading="lazy" width="560" height="420" alt="Carte interactive des circuits courts à Sarzeau" class="max-h-[420px] w-auto object-contain rounded shadow-md" onerror="this.onerror=null; this.src='https://placehold.co/560x420?text=Carte+interactive+Sarzeau';">
                     </div>
-                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50">
-                        <div><div class="flex justify-between items-center mb-3"><span class="bg-lime-100 text-lime-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Géographie de l'alimentation</span><span class="text-xs font-bold text-slate-400">09 / 09</span></div>
+                    <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-slate-50 overflow-y-auto">
+                        <div><div class="flex justify-between items-center mb-3 flex-wrap gap-2"><span class="bg-lime-100 text-lime-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Géographie de l'alimentation</span><span class="text-xs font-bold text-slate-400">09 / 09</span></div>
                         <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Circuits courts d'approvisionnement des cantines de Sarzeau (56)</h3>
                         <p class="text-sm text-slate-600 mb-4">Carte interactive réalisée dans le cadre d'un projet universitaire (UE HGABU30 - M1 Géographie, AMU). Elle représente la localisation des 12 producteurs partenaires de la cuisine centrale, les différents périmètres d'approvisionnement (communal, intercommunal, régional) et met en évidence la logique en « escargot » du dispositif.</p>
                         <div class="bg-lime-50 border-l-4 border-lime-500 p-3 rounded-r-lg"><h4 class="text-xs font-bold text-lime-900 uppercase mb-1">Contexte de réalisation</h4><p class="text-xs text-lime-800 italic">Réalisée avec Leaflet.js et des données issues d'entretiens de terrain (M. Fraval, L. Alletz) et du Registre Parcellaire Graphique (RPG 2023). La carte a servi de support à l'analyse des reconfigurations territoriales liées à la loi EGAlim et au passage en régie directe de la commune de Sarzeau.</p></div></div>
-                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4"><span>Fichier : <code class="bg-slate-200 px-1 rounded">cartes/approvisionnement_sarzeau.html</code></span><a href="cartes/approvisionnement_sarzeau.html" target="_blank" class="text-brand-600 font-bold hover:underline">🌍 Voir la carte interactive →</a></div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4 flex-wrap gap-2"><span>Fichier : <code class="bg-slate-200 px-1 rounded">cartes/approvisionnement_sarzeau.html</code></span><a href="cartes/approvisionnement_sarzeau.html" target="_blank" class="text-brand-600 font-bold hover:underline">🌍 Voir la carte interactive →</a></div>
                     </div>
                 </div>
             </div>
+
+            <!-- Puces de navigation -->
             <div class="flex justify-center space-x-2 mt-4" role="tablist" aria-label="Navigation du diaporama">
                 <button class="carto-dot w-8 h-3 bg-brand-600 rounded-full transition-all duration-300" role="tab" aria-selected="true" aria-label="Carte 1"></button>
                 <button class="carto-dot w-3 h-3 bg-slate-300 rounded-full transition-all duration-300" role="tab" aria-selected="false" aria-label="Carte 2"></button>
@@ -410,7 +480,7 @@
         </div>
     </section>
 
-    <!-- CURSUS & EXPÉRIENCES -->
+    <!-- CURSUS & EXPÉRIENCES (inchangé) -->
     <section id="experience" class="bg-slate-100 py-16">
         <div class="max-w-4xl mx-auto px-4">
             <div class="text-center mb-12 reveal">
@@ -426,44 +496,26 @@
         </div>
     </section>
 
-    <!-- CONTACT -->
+    <!-- CONTACT (avec mailto, inchangé) -->
     <section id="contact" class="bg-darkbg text-white py-16">
         <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="font-display text-3xl font-bold mb-4">Travaillons ensemble !</h2>
             <p class="text-slate-400 max-w-lg mx-auto mb-8 text-sm">Je suis activement à la recherche d'une opportunité de contrat d'alternance pour mon Master 2 à partir de septembre 2026. Discutons de vos besoins SIG !</p>
             <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm mb-10">
-                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
-                    <span class="block text-xs text-slate-400 uppercase font-semibold mb-1">Téléphone</span>
-                    <a href="tel:+33758174729" class="text-brand-500 font-bold hover:underline">(+33) 7 58 17 47 29</a>
-                </div>
-                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
-                    <span class="block text-xs text-slate-400 uppercase font-semibold mb-1">Email</span>
-                    <a href="mailto:mamadougueye766@gmail.com" class="text-brand-500 font-bold hover:underline break-all">mamadougueye766@gmail.com</a>
-                </div>
-                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
-                    <span class="block text-xs text-slate-400 uppercase font-semibold mb-1">LinkedIn</span>
-                    <a href="https://www.linkedin.com/in/mamadou-gueye-amu130" target="_blank" rel="noopener noreferrer" class="text-brand-500 font-bold hover:underline">in/mamadou-gueye-amu130</a>
-                </div>
+                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition"><span class="block text-xs text-slate-400 uppercase font-semibold mb-1">Téléphone</span><a href="tel:+33758174729" class="text-brand-500 font-bold hover:underline">(+33) 7 58 17 47 29</a></div>
+                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition"><span class="block text-xs text-slate-400 uppercase font-semibold mb-1">Email</span><a href="mailto:mamadougueye766@gmail.com" class="text-brand-500 font-bold hover:underline break-all">mamadougueye766@gmail.com</a></div>
+                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition"><span class="block text-xs text-slate-400 uppercase font-semibold mb-1">LinkedIn</span><a href="https://www.linkedin.com/in/mamadou-gueye-amu130" target="_blank" rel="noopener noreferrer" class="text-brand-500 font-bold hover:underline">in/mamadou-gueye-amu130</a></div>
             </div>
-
-            <!-- Formulaire avec mailto (ouvre le client mail) -->
             <div class="bg-slate-800 rounded-xl p-6 mb-10 text-left max-w-xl mx-auto">
                 <h3 class="font-display font-bold text-lg mb-4 text-white">Envoyer un message rapide</h3>
                 <div class="space-y-3">
-                    <input type="text" id="contact-name" placeholder="Votre nom" autocomplete="name"
-                           class="w-full bg-slate-700 text-white text-sm px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500 placeholder-slate-400 transition">
-                    <input type="email" id="contact-email" placeholder="Votre email" autocomplete="email"
-                           class="w-full bg-slate-700 text-white text-sm px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500 placeholder-slate-400 transition">
-                    <textarea id="contact-message" rows="3" placeholder="Votre message..."
-                              class="w-full bg-slate-700 text-white text-sm px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500 placeholder-slate-400 transition resize-none"></textarea>
-                    <button id="contact-send"
-                            class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2.5 rounded-lg transition text-sm">
-                        Envoyer via email →
-                    </button>
+                    <input type="text" id="contact-name" placeholder="Votre nom" autocomplete="name" class="w-full bg-slate-700 text-white text-sm px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500 placeholder-slate-400 transition">
+                    <input type="email" id="contact-email" placeholder="Votre email" autocomplete="email" class="w-full bg-slate-700 text-white text-sm px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500 placeholder-slate-400 transition">
+                    <textarea id="contact-message" rows="3" placeholder="Votre message..." class="w-full bg-slate-700 text-white text-sm px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500 placeholder-slate-400 transition resize-none"></textarea>
+                    <button id="contact-send" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2.5 rounded-lg transition text-sm">Envoyer via email →</button>
                     <p id="contact-feedback" class="text-xs text-slate-400 text-center hidden"></p>
                 </div>
             </div>
-
             <p class="text-xs text-slate-500 border-t border-slate-800 pt-8">&copy; 2026 Mamadou GUEYE. Fait avec passion pour la géomatique. Tous droits réservés.</p>
         </div>
     </section>
@@ -472,6 +524,7 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Burger menu
         const burgerBtn = document.getElementById('burger-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         burgerBtn.addEventListener('click', () => {
@@ -499,6 +552,7 @@
             });
         });
 
+        // Slider
         const slides = document.querySelectorAll('.carto-slide');
         const dots = document.querySelectorAll('.carto-dot');
         let currentIndex = 0;
@@ -511,8 +565,9 @@
             if (index < 0) index = slides.length - 1;
             currentIndex = index;
             slides.forEach((slide, i) => {
-                slide.classList.toggle('active', i === currentIndex);
-                slide.setAttribute('aria-hidden', i !== currentIndex);
+                const isActive = i === currentIndex;
+                slide.classList.toggle('active', isActive);
+                slide.setAttribute('aria-hidden', !isActive);
             });
             dots.forEach((dot, i) => {
                 const isActive = i === currentIndex;
@@ -542,23 +597,24 @@
         }, { passive: true });
         startTimer();
 
+        // Back to top
         const backToTop = document.getElementById('back-to-top');
         window.addEventListener('scroll', () => backToTop.classList.toggle('visible', window.scrollY > 400), { passive: true });
         backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
+        // Scroll animations
         const revealEls = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
         }, { threshold: 0.12 });
         revealEls.forEach(el => observer.observe(el));
 
-        // Formulaire de contact : ouverture du client mail
+        // Contact form mailto
         document.getElementById('contact-send').addEventListener('click', () => {
             const name = document.getElementById('contact-name').value.trim();
             const email = document.getElementById('contact-email').value.trim();
             const message = document.getElementById('contact-message').value.trim();
             const feedback = document.getElementById('contact-feedback');
-
             if (!name || !email || !message) {
                 feedback.textContent = '⚠️ Veuillez remplir tous les champs.';
                 feedback.classList.remove('hidden', 'text-brand-400');
