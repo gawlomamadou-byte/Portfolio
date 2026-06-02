@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mamadou GUEYE | Portfolio Géomatique & SIG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                        },
+                        darkbg: '#0f172a',
+                    },
+                    fontFamily: {
+                        display: ['Syne', 'sans-serif'],
+                        body: ['DM Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        h1, h2, h3, h4, nav a, .font-display { font-family: 'Syne', sans-serif; }
+
+        /* Slider transitions */
+        .carto-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+        @media (min-width: 768px) {
+            .carto-slide { flex-direction: row; }
+        }
+        .carto-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Mobile menu */
+        #mobile-menu {
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #mobile-menu.open {
+            max-height: 400px;
+            opacity: 1;
+        }
+
+        /* Back to top */
+        #back-to-top {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        #back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Timeline */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        @media (min-width: 768px) {
+            .timeline-line::before { left: 50%; }
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Swipe support helper */
+        .slider-wrapper { touch-action: pan-y; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full bg-darkbg/95 text-white backdrop-blur-sm z-50 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-display font-bold tracking-wider text-brand-500">M. GUEYE</a>
+
+            <!-- Desktop links -->
+            <div class="hidden md:flex space-x-6 text-sm font-medium items-center">
+                <a href="#about" class="hover:text-brand-500 transition">À propos</a>
+                <a href="#skills" class="hover:text-brand-500 transition">Compétences</a>
+                <a href="#projects" class="hover:text-brand-500 transition">Projets</a>
+                <a href="#cartotheque" class="hover:text-brand-500 transition text-brand-500 font-semibold">Cartothèque</a>
+                <a href="#experience" class="hover:text-brand-500 transition">Parcours</a>
+                <a href="#contact" class="bg-brand-600 px-4 py-2 rounded-md hover:bg-brand-700 transition">Contact</a>
+                <!-- NOUVEAU LIEN CV DESKTOP -->
+                <a href="CV_Gueye_Mamadou.pdf" target="_blank" rel="noopener noreferrer" class="border border-brand-500 text-brand-500 px-4 py-2 rounded-md hover:bg-brand-500 hover:text-white transition">CV</a>
+            </div>
+
+            <!-- Burger button -->
+            <button id="burger-btn" class="md:hidden flex flex-col gap-1.5 p-2 focus:outline-none" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
+                <span class="burger-line block w-6 h-0.5 bg-white transition-all duration-300"></span>
+                <span class="burger-line block w-6 h-0.5 bg-white transition-all duration-300"></span>
+                <span class="burger-line block w-6 h-0.5 bg-white transition-all duration-300"></span>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" role="navigation" aria-label="Menu mobile">
+            <div class="flex flex-col px-4 pb-4 space-y-3 text-sm font-medium border-t border-slate-700">
+                <a href="#about" class="hover:text-brand-500 transition pt-3">À propos</a>
+                <a href="#skills" class="hover:text-brand-500 transition">Compétences</a>
+                <a href="#projects" class="hover:text-brand-500 transition">Projets</a>
+                <a href="#cartotheque" class="text-brand-500 font-semibold">Cartothèque</a>
+                <a href="#experience" class="hover:text-brand-500 transition">Parcours</a>
+                <a href="#contact" class="bg-brand-600 px-4 py-2 rounded-md hover:bg-brand-700 transition text-center">Contact</a>
+                <!-- NOUVEAU LIEN CV MOBILE -->
+                <a href="CV_Gueye_Mamadou.pdf" target="_blank" rel="noopener noreferrer" class="border border-brand-500 text-brand-500 px-4 py-2 rounded-md text-center hover:bg-brand-500 hover:text-white transition">CV</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER / HERO -->
+    <header class="relative bg-darkbg text-white pt-32 pb-24 overflow-hidden flex items-center">
+        <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:30px_30px]"></div>
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <span class="bg-brand-900 text-brand-100 border border-brand-700 text-xs px-3 py-1 rounded-full uppercase font-semibold tracking-wider">Recherche Alternance M2 - Sept 2026</span>
+            <h1 class="font-display text-4xl md:text-6xl font-extrabold mt-4 mb-2 tracking-tight">Mamadou GUEYE</h1>
+            <p class="text-xl md:text-2xl text-brand-500 font-medium mb-6 font-display">Apprenti Ingénieur SIG / Géomaticien</p>
+            <p class="text-slate-400 max-w-2xl mx-auto mb-8 text-base md:text-lg">
+                Étudiant en Master Géomatique et Modélisation Spatiale. Passionné par l'analyse territoriale, le développement de WebSIG, la data science spatiale et le traitement d'images satellites pour répondre aux enjeux de la transition écologique.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#projects" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-6 py-3 rounded-lg shadow-lg transition">Découvrir mes projets</a>
+                <a href="#cartotheque" class="border border-slate-600 hover:border-brand-500 hover:text-brand-500 font-medium px-6 py-3 rounded-lg transition">Consulter la cartothèque</a>
+                <!-- NOUVEAU BOUTON CV DANS LA HERO -->
+                <a href="CV_Gueye_Mamadou.pdf" target="_blank" rel="noopener noreferrer" class="border border-slate-600 hover:border-brand-500 hover:text-brand-500 font-medium px-6 py-3 rounded-lg transition">
+                    📄 Mon CV (Aperçu)
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- À PROPOS -->
+    <section id="about" class="py-16 max-w-6xl mx-auto px-4">
+        <div class="grid md:grid-cols-3 gap-8 items-stretch">
+            <div class="reveal bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-display text-brand-600 font-bold uppercase text-xs tracking-wider mb-2">Profil</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Basé à Marseille avec une mobilité nationale. Mon profil combine une solide formation universitaire en géographie/aménagement et une expertise technique avancée en traitement de données géospatiales complexes (R, Python, SQL Spatiale).
+                    </p>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-500">
+                    📍 Marseille / Mobilité Nationale
+                </div>
+            </div>
+            <div class="reveal bg-white p-6 rounded-xl shadow-sm border border-slate-100 text-center flex flex-col justify-center" style="transition-delay:0.1s">
+                <span class="text-4xl font-display font-extrabold text-darkbg mb-1">5+</span>
+                <span class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Projets d'Analyse Majeurs</span>
+                <p class="text-xs text-slate-400 mt-2">Du WebSIG prospectif à la modélisation fine de réseaux de transport urbain.</p>
+            </div>
+            <div class="reveal bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-between" style="transition-delay:0.2s">
+                <div>
+                    <h3 class="font-display text-brand-600 font-bold uppercase text-xs tracking-wider mb-2">Aptitudes clés</h3>
+                    <ul class="text-sm text-slate-600 space-y-2">
+                        <li>⚡ Rigueur &amp; Méthodologie</li>
+                        <li>🤝 Collaboration (Hackathons)</li>
+                        <li>✍️ Aisance rédactionnelle &amp; Pédagogie</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPÉTENCES -->
+    <section id="skills" class="bg-slate-100 py-16">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-darkbg">Boîte à outils technique</h2>
+                <p class="text-slate-500 mt-2">Les technologies et langages que je maîtrise au quotidien.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="reveal bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-brand-600 mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-darkbg mb-2">SIG &amp; Webmapping</h3>
+                    <p class="text-xs text-slate-500">QGIS (Avancé), ArcGIS Pro, QGIS2Web, Leaflet.js, Écosystème WebSIG interactif.</p>
+                </div>
+                <div class="reveal bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition" style="transition-delay:0.1s">
+                    <div class="text-brand-600 mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"></path></svg>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-darkbg mb-2">Bases de données</h3>
+                    <p class="text-xs text-slate-500">SQL Spatial, PostgreSQL/PostGIS, requêtage avancé, jointures &amp; agrégations spatiales, contrôle topologique.</p>
+                </div>
+                <div class="reveal bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition" style="transition-delay:0.2s">
+                    <div class="text-brand-600 mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-darkbg mb-2">Data Science &amp; Code</h3>
+                    <p class="text-xs text-slate-500">Python (Pandas, GeoPandas, Matplotlib, OSMnx, NetworkX), R (Statistiques et régressions spatiales), Google Colab.</p>
+                </div>
+                <div class="reveal bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition" style="transition-delay:0.3s">
+                    <div class="text-brand-600 mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-darkbg mb-2">Télédétection &amp; Image</h3>
+                    <p class="text-xs text-slate-500">Classification d'images (Sentinel-2, Landsat 8), calcul d'indices (NDVI, NDWI), logiciels ENVI, TerrSet et SNAP.</p>
+                </div>
+            </div>
+            <div class="mt-6 bg-white p-4 rounded-xl shadow-sm text-center text-xs text-slate-600 reveal">
+                <span class="font-bold text-brand-600">Données manipulées fréquemment :</span> Données IGN (BD TOPO, BD Forêt, RPG, BD Parcellaire), Corine Land Cover, BDIFF, OpenStreetMap (OSM), INSEE / Carroyage IRIS, Projections climatiques du GIEC.
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJETS TECHNIQUES -->
+    <section id="projects" class="py-16 max-w-6xl mx-auto px-4">
+        <div class="text-center mb-12 reveal">
+            <h2 class="font-display text-3xl font-bold text-darkbg">Projets Techniques &amp; Réalisations</h2>
+            <p class="text-slate-500 mt-2">Une vitrine de mes compétences en analyse spatiale, traitement de données et cartographie.</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+
+            <div class="reveal bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition flex flex-col group">
+                <div class="h-64 bg-white relative border-b border-slate-100 overflow-hidden">
+                    <img src="images/tc-sans-velib.png" loading="lazy" width="600" height="256"
+                         alt="Accessibilité transports Paris"
+                         class="w-full h-full object-contain p-2 group-hover:scale-[1.02] transition duration-300">
+                    <div class="absolute top-2 right-2 bg-darkbg/85 text-white text-[10px] px-2 py-1 rounded backdrop-blur-sm font-medium">Isochrones GTFS</div>
+                </div>
+                <div class="p-6 flex-grow">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">Analyse de Réseau &amp; Accessibilité</span>
+                        <span class="text-xs text-slate-400 font-medium">2026</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-darkbg mb-2">Transports publics à Paris : Accessibilité différenciée</h3>
+                    <p class="text-sm text-slate-600 mb-4">Modélisation du temps médian d'accès (grille 200m) basé sur l'analyse de données de l'offre de transport. Évaluation des dynamiques spatiales d'accès aux infrastructures de transport en commun sans l'apport du réseau Vélib'.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Données GTFS IDFM</span>
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Analyse Grid 200m</span>
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">QGIS</span>
+                    </div>
+                </div>
+                <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-xs">
+                    <span class="text-slate-500">Auteur : M. GUEYE</span>
+                    <!-- LIEN NOTEBOOK CORRIGÉ -->
+                    <a href="https://colab.research.google.com/drive/12dIILAwtJmGbTIiZ5ov2F_HJPy1MZocK?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-brand-600 font-bold hover:underline">Notebook Code →</a>
+                </div>
+            </div>
+
+            <div class="reveal bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition flex flex-col group" style="transition-delay:0.1s">
+                <div class="h-64 bg-white relative border-b border-slate-100 overflow-hidden">
+                    <img src="images/ilot-de-bat.png" loading="lazy" width="600" height="256"
+                         alt="Densité de bâti Nice"
+                         class="w-full h-full object-contain p-2 group-hover:scale-[1.02] transition duration-300">
+                    <div class="absolute top-2 right-2 bg-darkbg/85 text-white text-[10px] px-2 py-1 rounded backdrop-blur-sm font-medium">Analyse Morphologique</div>
+                </div>
+                <div class="p-6 flex-grow">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded">Urbanisme &amp; Morphologie spatiale</span>
+                        <span class="text-xs text-slate-400 font-medium">2025</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-darkbg mb-2">Analyse de la densité du bâti par îlot à Nice</h3>
+                    <p class="text-sm text-slate-600 mb-4">Extraction et discrétisation des entités bâties de la commune de Nice. Quantification fine du nombre de bâtiments par îlot urbain continu en croisant les référentiels nationaux et européens.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">BD TOPO IGN</span>
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Corine Land Cover</span>
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">PostGIS</span>
+                    </div>
+                </div>
+                <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-xs">
+                    <span class="text-slate-500">Auteur : M. GUEYE</span>
+                    <span class="text-slate-400 italic">Discrétisation par seuils</span>
+                </div>
+            </div>
+
+            <div class="reveal bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition flex flex-col group">
+                <div class="h-64 bg-white relative border-b border-slate-100 overflow-hidden">
+                    <img src="images/incendie-zone.png" loading="lazy" width="600" height="256"
+                         alt="Zone incendie Bormes les Mimosas"
+                         class="w-full h-full object-contain p-2 group-hover:scale-[1.02] transition duration-300">
+                    <div class="absolute top-2 right-2 bg-darkbg/85 text-white text-[10px] px-2 py-1 rounded backdrop-blur-sm font-medium">Télédétection &amp; Risques</div>
+                </div>
+                <div class="p-6 flex-grow">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded">Gestion des Risques Naturels</span>
+                        <span class="text-xs text-slate-400 font-medium">2025</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-darkbg mb-2">Cartographie des surfaces brûlées : Bormes-les-Mimosas</h3>
+                    <p class="text-sm text-slate-600 mb-4">Détorage et calcul de la superficie affectée par les grands incendies de 2017 dans le Var. Analyse spatio-temporelle combinant imagerie spatiale Landsat 8 (capteurs OLI/TIRS) et données d'inventaires de la BDIFF.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Landsat 8 OLI/TIRS</span>
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">BDIFF</span>
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Traitement Raster</span>
+                    </div>
+                </div>
+                <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-xs">
+                    <span class="text-slate-500">Auteur : M. GUEYE</span>
+                    <span class="text-slate-400 italic">EPSG : 2154 (Lambert-93)</span>
+                </div>
+            </div>
+
+            <div class="reveal bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition flex flex-col group" style="transition-delay:0.1s">
+                <div class="h-64 bg-slate-100 relative flex items-center justify-center border-b border-slate-100">
+                    <div class="text-center p-4">
+                        <svg class="w-12 h-12 mx-auto text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                        <span class="text-xs text-slate-400 font-medium">Visualisation WebSIG / Télédétection</span>
+                    </div>
+                </div>
+                <div class="p-6 flex-grow">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2 py-1 rounded">Webmapping / Télédétection</span>
+                        <span class="text-xs text-slate-400 font-medium">2025</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-darkbg mb-2">Prospective Camargue 2050 &amp; Imagerie Klaipėda</h3>
+                    <p class="text-sm text-slate-600 mb-4">Modélisation des espaces menacés par la montée des eaux (Scénarios GIEC) et classification LULC multi-temporelle (Sentinel-2 &amp; Kanopé V) pour le suivi des enveloppes urbaines européennes.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Leaflet.js</span>
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Sentinel-2</span>
+                        <span class="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Classification LULC</span>
+                    </div>
+                </div>
+                <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center text-xs">
+                    <span class="text-slate-500">Projets Avancés</span>
+                    <a href="https://crige-paca-lab.github.io/hackathon_crige_2025/resultats/Aix/D%C3%A9fi%204%20-%20quels%20espaces%20agricoles%20en%20Crau-Camargue%20en%202050/" target="_blank" rel="noopener noreferrer" class="text-brand-600 font-bold hover:underline">Lien WebSIG →</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CARTOTHÈQUE -->
+    <section id="cartotheque" class="py-16 bg-slate-50 border-t border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-10 reveal">
+                <h2 class="font-display text-3xl font-bold text-darkbg">Ma Cartothèque</h2>
+                <p class="text-slate-500 mt-2">Défilement interactif de mes productions géospatiales — Rotation automatique toutes les 8 secondes.</p>
+            </div>
+
+            <!-- Slider Wrapper -->
+            <div class="relative bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden slider-wrapper" style="min-height: 480px;"
+                 role="region" aria-label="Cartothèque - diaporama de cartes"
+                 aria-live="polite">
+
+                <!-- Boutons de contrôle -->
+                <button id="prev-carto"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 bg-darkbg/80 hover:bg-brand-600 text-white p-3 rounded-full transition z-30 focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-md"
+                    aria-label="Carte précédente">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button id="next-carto"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 bg-darkbg/80 hover:bg-brand-600 text-white p-3 rounded-full transition z-30 focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-md"
+                    aria-label="Carte suivante">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+
+                <!-- CARTE 1 -->
+                <div class="carto-slide active" role="group" aria-roledescription="diapositive" aria-label="Diapositive 1 sur 8">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4" style="min-height:260px">
+                        <img src="cartes/carte1.png" loading="lazy" width="560" height="420"
+                             alt="Scénarios d'accessibilité par mode de transport à Paris"
+                             class="max-h-[420px] w-auto object-contain rounded shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Modélisation de Réseau</span>
+                                <span class="text-xs font-bold text-slate-400">01 / 08</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Scénarios d'accessibilité par mode de transport</h3>
+                            <p class="text-sm text-slate-600 mb-4">Cartographie comparative des temps médians d'accès à Paris selon quatre configurations d'offre multimodale (Bus seul, Métro/Tram, Bus+Vélib, Rail+Vélib).</p>
+                            <div class="bg-purple-50 border-l-4 border-purple-500 p-3 rounded-r-lg">
+                                <h4 class="text-xs font-bold text-purple-900 uppercase mb-1">Methodology &amp; Data</h4>
+                                <p class="text-xs text-purple-800 italic">Interpolation et calcul de matrices de temps sur un carroyage régulier de 200m d'emprise spatiale basé sur les flux GTFS d'Île-de-France Mobilités.</p>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4">
+                            <span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte1.png</code></span>
+                            <span class="font-semibold text-brand-600">GTFS IDFM / Grid 200m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARTE 2 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 2 sur 8" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4" style="min-height:260px">
+                        <img src="cartes/carte2.png" loading="lazy" width="560" height="420"
+                             alt="Dashboard analytique d'accessibilité aux transports en commun"
+                             class="max-h-[420px] w-auto object-contain rounded shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Datavisualisation</span>
+                                <span class="text-xs font-bold text-slate-400">02 / 08</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Dashboard analytique d'accessibilité aux TC</h3>
+                            <p class="text-sm text-slate-600 mb-4">Tableau de bord statistique de synthèse croisant les indicateurs de performance géospatiale des réseaux de transport avec les disparités économiques territoriales.</p>
+                            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-3 rounded-r-lg">
+                                <h4 class="text-xs font-bold text-indigo-900 uppercase mb-1">Methodology &amp; Data</h4>
+                                <p class="text-xs text-indigo-800 italic">Génération de courbes de concentration de Lorenz et calcul de coefficients d'inégalités spatiales pondérés par le fichier Filosofi de l'Insee.</p>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4">
+                            <span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte2.png</code></span>
+                            <span class="font-semibold text-brand-600">R &amp; Python Spatial / INSEE Filosofi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARTE 3 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 3 sur 8" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4" style="min-height:260px">
+                        <img src="cartes/carte3.jpg" loading="lazy" width="560" height="420"
+                             alt="Occupation du sol du quartier de Lyndiane à Ziguinchor"
+                             class="max-h-[420px] w-auto object-contain rounded shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">SIG Urbain</span>
+                                <span class="text-xs font-bold text-slate-400">03 / 08</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Occupation du sol du quartier de Lyndiane</h3>
+                            <p class="text-sm text-slate-600 mb-4">Cartographie d'inventaire parcellaire de précision du quartier de Lyndiane à Ziguinchor (Sénégal) différenciant finement le bâti, la végétation dense, le réseau de pistes et les champs.</p>
+                            <div class="bg-rose-50 border-l-4 border-rose-500 p-3 rounded-r-lg">
+                                <h4 class="text-xs font-bold text-rose-900 uppercase mb-1">Methodology &amp; Data</h4>
+                                <p class="text-xs text-rose-800 italic">Numérisation vecteur et photo-interprétation d'imagerie haute résolution à l'échelle fine du quartier. Projection calée en WGS 84 / UTM Zone 28N.</p>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4">
+                            <span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte3.jpg</code></span>
+                            <span class="font-semibold text-brand-600">Vectorisation SIG / Google Earth</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARTE 4 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 4 sur 8" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4" style="min-height:260px">
+                        <img src="cartes/carte4.jpg" loading="lazy" width="560" height="420"
+                             alt="Plan de masse et aménagement du Campus UASZ"
+                             class="max-h-[420px] w-auto object-contain rounded shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-orange-100 text-orange-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Infrastructures</span>
+                                <span class="text-xs font-bold text-slate-400">04 / 08</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Plan de masse et aménagement du Campus UASZ</h3>
+                            <p class="text-sm text-slate-600 mb-4">Plan d'inventaire structurel de l'Université Assane Seck de Ziguinchor, cartographiant l'ensemble des pavillons pédagogiques, amphis, hébergements et complexes sportifs.</p>
+                            <div class="bg-orange-50 border-l-4 border-orange-500 p-3 rounded-r-lg">
+                                <h4 class="text-xs font-bold text-orange-900 uppercase mb-1">Methodology &amp; Data</h4>
+                                <p class="text-xs text-orange-800 italic">Structuration topologique d'une base de données d'infrastructures à partir de données de télédétection à haute résolution spatiale. Système UTM 28N.</p>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4">
+                            <span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte4.jpg</code></span>
+                            <span class="font-semibold text-brand-600">SIG Aménagement Établissement</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARTE 5 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 5 sur 8" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4" style="min-height:260px">
+                        <img src="cartes/carte5.png" loading="lazy" width="560" height="420"
+                             alt="Densité de construction par IRIS à Nice"
+                             class="max-h-[420px] w-auto object-contain rounded shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-teal-100 text-teal-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase">Analyse Morphologique</span>
+                                <span class="text-xs font-bold text-slate-400">05 / 08</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Densité de construction (Building %) par IRIS à Nice</h3>
+                            <p class="text-sm text-slate-600 mb-4">Analyse morphologique spatiale de la commune de Nice évaluant le taux d'emprise au sol des structures bâties rapporté à l'échelle fine du découpage infracommunal IRIS.</p>
+                            <div class="bg-teal-50 border-l-4 border-teal-500 p-3 rounded-r-lg">
+                                <h4 class="text-xs font-bold text-teal-900 uppercase mb-1">Methodology &amp; Data</h4>
+                                <p class="text-xs text-teal-800 italic">Requêtage, intersection spatiale et agrégation des polygones issus de la BD TOPO IGN au sein de la maille statistique administrative IRIS.</p>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4">
+                            <span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte5.png</code></span>
+                            <span class="font-semibold text-brand-600">IGN BD TOPO / Maillage IRIS Insee</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARTE 6 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 6 sur 8" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4" style="min-height:260px">
+                        <img src="cartes/carte6.png" loading="lazy" width="560" height="420"
+                             alt="Taux de massifs forestiers par commune dans le Var"
+                             class="max-h-[420px] w-auto object-contain rounded shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Cartographie Thématique</span>
+                                <span class="text-xs font-bold text-slate-400">06 / 08</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Taux de massifs forestiers (%) par commune</h3>
+                            <p class="text-sm text-slate-600 mb-4">Analyse de la répartition de la couverture arborée communale dans le département du Var (PACA), mettant en valeur les structures environnementales intérieures face à la pression littorale.</p>
+                            <div class="bg-emerald-50 border-l-4 border-emerald-500 p-3 rounded-r-lg">
+                                <h4 class="text-xs font-bold text-emerald-900 uppercase mb-1">Methodology &amp; Data</h4>
+                                <p class="text-xs text-emerald-800 italic">Discrétisation par seuils géométriques pour optimiser les contrastes spatiaux. Sources : IGN BD Forêt &amp; Limites Administratives communes.</p>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4">
+                            <span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte6.png</code></span>
+                            <span class="font-semibold text-brand-600">QGIS / EPSG:2154</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARTE 7 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 7 sur 8" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4" style="min-height:260px">
+                        <img src="cartes/carte7.png" loading="lazy" width="560" height="420"
+                             alt="Occupation du sol de Klaipėda en Lituanie"
+                             class="max-h-[420px] w-auto object-contain rounded shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Télédétection</span>
+                                <span class="text-xs font-bold text-slate-400">07 / 08</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Occupation du sol de Klaipėda</h3>
+                            <p class="text-sm text-slate-600 mb-4">Classification supervisée d'occupation du sol (LULC) de la bande littorale de Klaipėda en Lituanie afin d'isoler l'étalement urbain des matrices écosystémiques.</p>
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r-lg">
+                                <h4 class="text-xs font-bold text-blue-900 uppercase mb-1">Methodology &amp; Data</h4>
+                                <p class="text-xs text-blue-800 italic">Traitement d'imagerie multispectrale Sentinel-2 MSI. Identification de 5 classes clés : Water, Fields, Woods, Bare Land et Built-up.</p>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4">
+                            <span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte7.png</code></span>
+                            <span class="font-semibold text-brand-600">Sentinel-2 / GUEYE &amp; BAKHOUM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARTE 8 -->
+                <div class="carto-slide" role="group" aria-roledescription="diapositive" aria-label="Diapositive 8 sur 8" aria-hidden="true">
+                    <div class="w-full md:w-1/2 bg-slate-900 flex items-center justify-center p-4" style="min-height:260px">
+                        <img src="cartes/carte8.png" loading="lazy" width="560" height="420"
+                             alt="Suivi multi-temporel des émissions de torchères VIIRS"
+                             class="max-h-[420px] w-auto object-contain rounded shadow-md">
+                    </div>
+                    <div class="w-full md:w-1/2 p-8 flex flex-col justify-between bg-slate-50">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Analyse Spatio-Temporelle</span>
+                                <span class="text-xs font-bold text-slate-400">08 / 08</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold text-darkbg mb-3">Suivi multi-temporel des émissions de torchères</h3>
+                            <p class="text-sm text-slate-600 mb-4">Visualisation et extraction des dynamiques spatiales d'émissions de gaz à effet de serre issues du torchage industriel nocturne sur plusieurs années de référence.</p>
+                            <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg">
+                                <h4 class="text-xs font-bold text-amber-900 uppercase mb-1">Methodology &amp; Data</h4>
+                                <p class="text-xs text-amber-800 italic">Exploitation de données thermiques nocturnes issues des capteurs radiométriques NOAA / VIIRS intégrées sur un fond sombre cartographique (CartoDB Dark Matter).</p>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 border-t border-slate-200 pt-3 flex justify-between mt-4">
+                            <span>Path: <code class="bg-slate-200 px-1 rounded">cartes/carte8.png</code></span>
+                            <span class="font-semibold text-brand-600">VIIRS Flares Nighttime Data</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- fin slider-wrapper -->
+
+            <!-- Puces de navigation -->
+            <div class="flex justify-center space-x-2 mt-4" role="tablist" aria-label="Navigation du diaporama">
+                <button class="carto-dot w-8 h-3 bg-brand-600 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500" role="tab" aria-selected="true" aria-label="Carte 1"></button>
+                <button class="carto-dot w-3 h-3 bg-slate-300 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500" role="tab" aria-selected="false" aria-label="Carte 2"></button>
+                <button class="carto-dot w-3 h-3 bg-slate-300 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500" role="tab" aria-selected="false" aria-label="Carte 3"></button>
+                <button class="carto-dot w-3 h-3 bg-slate-300 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500" role="tab" aria-selected="false" aria-label="Carte 4"></button>
+                <button class="carto-dot w-3 h-3 bg-slate-300 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500" role="tab" aria-selected="false" aria-label="Carte 5"></button>
+                <button class="carto-dot w-3 h-3 bg-slate-300 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500" role="tab" aria-selected="false" aria-label="Carte 6"></button>
+                <button class="carto-dot w-3 h-3 bg-slate-300 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500" role="tab" aria-selected="false" aria-label="Carte 7"></button>
+                <button class="carto-dot w-3 h-3 bg-slate-300 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500" role="tab" aria-selected="false" aria-label="Carte 8"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CURSUS & EXPÉRIENCES -->
+    <section id="experience" class="bg-slate-100 py-16">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-darkbg">Cursus &amp; Expériences</h2>
+                <p class="text-slate-500 mt-2">Mon parcours académique et associatif.</p>
+            </div>
+            <div class="space-y-8 relative timeline-line">
+
+                <div class="reveal relative flex flex-col md:flex-row items-start md:items-center">
+                    <div class="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-brand-500 border-4 border-white -translate-x-1.5 z-10"></div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-12 md:text-right">
+                        <span class="text-brand-600 font-bold text-sm">2025 - En cours</span>
+                        <h4 class="font-display text-lg font-bold text-darkbg">Master Géomatique &amp; Modélisation Spatiale</h4>
+                        <p class="text-sm text-slate-500">Aix-Marseille Université (amU)</p>
+                        <p class="text-xs text-slate-400 mt-1">Géo-simulation, Webmapping, IA appliquée en géographie, Télédétection.</p>
+                    </div>
+                </div>
+
+                <div class="reveal relative flex flex-col md:flex-row items-start md:items-center" style="transition-delay:0.1s">
+                    <div class="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-slate-400 border-4 border-white -translate-x-1.5 z-10"></div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-12 md:translate-x-1/2">
+                        <span class="text-brand-600 font-bold text-sm">2024 - 2025</span>
+                        <h4 class="font-display text-lg font-bold text-darkbg">Licence 3 - Géographie &amp; Aménagement</h4>
+                        <p class="text-sm text-slate-500">Aix-Marseille Université (amU)</p>
+                        <p class="text-xs text-slate-400 mt-1">SIG, Ateliers de télédétection appliquée, Analyse des risques naturels.</p>
+                    </div>
+                </div>
+
+                <div class="reveal relative flex flex-col md:flex-row items-start md:items-center" style="transition-delay:0.2s">
+                    <div class="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-slate-400 border-4 border-white -translate-x-1.5 z-10"></div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-0 md:pr-12 md:text-right">
+                        <span class="text-brand-600 font-bold text-sm">2023</span>
+                        <h4 class="font-display text-lg font-bold text-darkbg">Président de la Commission Pédagogique</h4>
+                        <p class="text-sm text-slate-500">Amicale des étudiants en Géographie - UASZ Sénégal</p>
+                        <p class="text-xs text-slate-400 mt-1">Planification de tutorats, animation de conférences et rédaction de comptes rendus.</p>
+                    </div>
+                </div>
+
+                <div class="reveal relative flex flex-col md:flex-row items-start md:items-center" style="transition-delay:0.3s">
+                    <div class="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-slate-400 border-4 border-white -translate-x-1.5 z-10"></div>
+                    <div class="w-full md:w-1/2 pl-12 md:pl-12 md:translate-x-1/2">
+                        <span class="text-brand-600 font-bold text-sm">2022</span>
+                        <h4 class="font-display text-lg font-bold text-darkbg">Membre de la Green Team</h4>
+                        <p class="text-sm text-slate-500">Sénégal</p>
+                        <p class="text-xs text-slate-400 mt-1">Participation à des projets de restauration d'écosystèmes et sensibilisation environnementale.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="bg-darkbg text-white py-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="font-display text-3xl font-bold mb-4">Travaillons ensemble !</h2>
+            <p class="text-slate-400 max-w-lg mx-auto mb-8 text-sm">
+                Je suis activement à la recherche d'une opportunité de contrat d'alternance pour mon Master 2 à partir de septembre 2026. Discutons de vos besoins SIG !
+            </p>
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6 text-sm mb-10">
+                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
+                    <span class="block text-xs text-slate-400 uppercase font-semibold mb-1">Téléphone</span>
+                    <a href="tel:+33758174729" class="text-brand-500 font-bold hover:underline">(+33) 7 58 17 47 29</a>
+                </div>
+                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
+                    <span class="block text-xs text-slate-400 uppercase font-semibold mb-1">Email</span>
+                    <a href="mailto:mamadougueye766@gmail.com" class="text-brand-500 font-bold hover:underline break-all">mamadougueye766@gmail.com</a>
+                </div>
+                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
+                    <span class="block text-xs text-slate-400 uppercase font-semibold mb-1">LinkedIn</span>
+                    <a href="https://linkedin.com/in/mamadougueye" target="_blank" rel="noopener noreferrer" class="text-brand-500 font-bold hover:underline">in/mamadougueye</a>
+                </div>
+                <div class="p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
+                    <span class="block text-xs text-slate-400 uppercase font-semibold mb-1">GitHub</span>
+                    <a href="https://github.com/mgueye-sig" target="_blank" rel="noopener noreferrer" class="text-brand-500 font-bold hover:underline">mgueye-sig</a>
+                </div>
+            </div>
+
+            <!-- Formulaire de contact rapide -->
+            <div class="bg-slate-800 rounded-xl p-6 mb-10 text-left max-w-xl mx-auto">
+                <h3 class="font-display font-bold text-lg mb-4 text-white">Envoyer un message rapide</h3>
+                <div class="space-y-3">
+                    <input type="text" id="contact-name" placeholder="Votre nom" autocomplete="name"
+                           class="w-full bg-slate-700 text-white text-sm px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500 placeholder-slate-400 transition">
+                    <input type="email" id="contact-email" placeholder="Votre email" autocomplete="email"
+                           class="w-full bg-slate-700 text-white text-sm px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500 placeholder-slate-400 transition">
+                    <textarea id="contact-message" rows="3" placeholder="Votre message..."
+                              class="w-full bg-slate-700 text-white text-sm px-4 py-2.5 rounded-lg border border-slate-600 focus:outline-none focus:border-brand-500 placeholder-slate-400 transition resize-none"></textarea>
+                    <button id="contact-send"
+                            class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2.5 rounded-lg transition text-sm">
+                        Envoyer via email →
+                    </button>
+                    <p id="contact-feedback" class="text-xs text-slate-400 text-center hidden"></p>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-500 border-t border-slate-800 pt-8">
+                &copy; 2026 Mamadou GUEYE. Fait avec passion pour la géomatique. Tous droits réservés.
+            </p>
+        </div>
+    </section>
+
+    <!-- BOUTON RETOUR EN HAUT -->
+    <button id="back-to-top"
+            class="fixed bottom-6 right-6 z-50 bg-brand-600 hover:bg-brand-700 text-white p-3 rounded-full shadow-lg transition focus:outline-none focus:ring-2 focus:ring-brand-500"
+            aria-label="Retour en haut de page">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // ─── BURGER MENU ────────────────────────────────────────
+        const burgerBtn = document.getElementById('burger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        burgerBtn.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            burgerBtn.setAttribute('aria-expanded', isOpen);
+            // Animate burger lines
+            const lines = burgerBtn.querySelectorAll('.burger-line');
+            if (isOpen) {
+                lines[0].style.transform = 'translateY(8px) rotate(45deg)';
+                lines[1].style.opacity = '0';
+                lines[2].style.transform = 'translateY(-8px) rotate(-45deg)';
+            } else {
+                lines[0].style.transform = '';
+                lines[1].style.opacity = '';
+                lines[2].style.transform = '';
+            }
+        });
+        // Fermer le menu mobile au clic sur un lien
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                burgerBtn.setAttribute('aria-expanded', 'false');
+                const lines = burgerBtn.querySelectorAll('.burger-line');
+                lines[0].style.transform = '';
+                lines[1].style.opacity = '';
+                lines[2].style.transform = '';
+            });
+        });
+
+        // ─── SLIDER CARTOTHÈQUE ─────────────────────────────────
+        const slides = document.querySelectorAll('.carto-slide');
+        const dots   = document.querySelectorAll('.carto-dot');
+        let currentIndex = 0;
+        let autoSlideInterval;
+        const intervalTime = 8000;
+
+        // Variables pour le swipe touch
+        let touchStartX = 0;
+        let touchEndX   = 0;
+
+        function changeSlide(index) {
+            if (index >= slides.length) index = 0;
+            if (index < 0) index = slides.length - 1;
+            currentIndex = index;
+
+            slides.forEach((slide, i) => {
+                const isActive = i === currentIndex;
+                slide.classList.toggle('active', isActive);
+                slide.setAttribute('aria-hidden', String(!isActive));
+            });
+
+            dots.forEach((dot, i) => {
+                const isActive = i === currentIndex;
+                dot.classList.toggle('bg-brand-600', isActive);
+                dot.classList.toggle('w-8', isActive);
+                dot.classList.toggle('bg-slate-300', !isActive);
+                dot.classList.toggle('w-3', !isActive);
+                dot.setAttribute('aria-selected', String(isActive));
+            });
+        }
+
+        function startTimer() {
+            autoSlideInterval = setInterval(() => changeSlide(currentIndex + 1), intervalTime);
+        }
+        function resetTimer() {
+            clearInterval(autoSlideInterval);
+            startTimer();
+        }
+
+        document.getElementById('next-carto').addEventListener('click', () => { changeSlide(currentIndex + 1); resetTimer(); });
+        document.getElementById('prev-carto').addEventListener('click', () => { changeSlide(currentIndex - 1); resetTimer(); });
+
+        dots.forEach((dot, i) => dot.addEventListener('click', () => { changeSlide(i); resetTimer(); }));
+
+        // Pause au survol
+        const sliderWrapper = document.querySelector('.slider-wrapper');
+        sliderWrapper.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+        sliderWrapper.addEventListener('mouseleave', () => startTimer());
+
+        // Support swipe mobile
+        sliderWrapper.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        sliderWrapper.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                changeSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
+                resetTimer();
+            }
+        }, { passive: true });
+
+        startTimer();
+
+        // ─── RETOUR EN HAUT ─────────────────────────────────────
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 400);
+        }, { passive: true });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // ─── ANIMATIONS AU SCROLL (Intersection Observer) ───────
+        const revealEls = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        revealEls.forEach(el => observer.observe(el));
+
+        // ─── FORMULAIRE CONTACT (mailto) ────────────────────────
+        document.getElementById('contact-send').addEventListener('click', () => {
+            const name    = document.getElementById('contact-name').value.trim();
+            const email   = document.getElementById('contact-email').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+            const feedback = document.getElementById('contact-feedback');
+
+            if (!name || !email || !message) {
+                feedback.textContent = '⚠️ Veuillez remplir tous les champs.';
+                feedback.classList.remove('hidden', 'text-brand-400');
+                feedback.classList.add('text-red-400');
+                return;
+            }
+            const subject = encodeURIComponent(`Contact Portfolio — ${name}`);
+            const body    = encodeURIComponent(`Nom : ${name}\nEmail : ${email}\n\n${message}`);
+            window.location.href = `mailto:mamadougueye766@gmail.com?subject=${subject}&body=${body}`;
+            feedback.textContent = '✅ Ouverture de votre client email…';
+            feedback.classList.remove('hidden', 'text-red-400');
+            feedback.classList.add('text-brand-400');
+        });
+
+    });
+    </script>
+</body>
+</html>
